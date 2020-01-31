@@ -6,7 +6,7 @@ This project provides an user interface to [NewsFrom application](http://newsfro
 ## About NewsFrom
 It is an application to display news at related locations.
 Content is gathered from RSS feeds of various publishers with different categories.
-Project consist of 3 components:
+Project consists of 3 components:
 
 * *newslocator*
 * *newsfrom-api*

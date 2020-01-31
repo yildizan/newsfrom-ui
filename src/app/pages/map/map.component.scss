@@ -1,0 +1,75 @@
+.badge[data-count]::before {
+	content: attr(data-count);
+}
+
+.badge {
+    position: absolute;
+    top: -10px;
+    text-align: center;
+    border-radius: 1vw;
+    color: white;
+    padding: 0.3em 0.6em;
+    font-weight: bold;
+    font-size: 0.9em;
+    left: 42px;
+}
+
+%bg-1 { background: #018CFA; };
+%bg-2 { background: #FDC100; };
+%bg-3 { background: #F70500; };
+%bg-4 { background: #FE00EC; };
+%bg-5 { background: #9C01FF; };
+
+@for $i from 1 through 5 {
+  .badge-#{$i} {
+    @extend %bg-#{$i};
+  }
+}
+
+.cluster-icon {
+  display: inline-block;
+  background-image: url('src/assets/icon/cluster@2x.png');
+  background-size: contain;
+  border: 0;
+}
+
+.easy-icon {
+  font-size:18px;
+  padding-bottom: 3px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.easy-button-button {
+  padding: 0 !important;
+}
+
+.content-wrapper {
+  max-width: inherit;
+  max-height: inherit;
+}
+
+.text-wrapper {
+  overflow-y: auto;
+}
+
+div.mat-expansion-panel-body {
+  padding: 0 0.5vw;
+}
+
+.header {
+  display: block;
+}
+
+.footer {
+  margin-bottom: 1vmax;
+}
+
+.speech-bubble {
+  position: relative !important;
+
+  .mat-dialog-container {
+    border-radius: 10px;
+    padding: 0;
+  }
+}

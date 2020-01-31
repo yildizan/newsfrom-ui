@@ -1,0 +1,45 @@
+<h1 mat-dialog-title>Search</h1>
+<div mat-dialog-content class="container" fxLayout="column" fxLayoutAlign="center center">
+  <mat-form-field>
+    <mat-chip-list #chipList>
+      <mat-chip *ngFor="let keyword of keywords" [removable]="true" (removed)="remove(keyword)">
+        {{keyword}}
+        <a matChipRemove fxLayoutAlign="center center"><i class="fas fa-times"></i></a>
+      </mat-chip>
+      <input placeholder="Keywords" [matChipInputFor]="chipList" [matChipInputAddOnBlur]="true"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)">
+    </mat-chip-list>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>
+      <span fxLayoutAlign="start center">
+        <i class="fas fa-list fa-sm"></i> 
+        <b class="icon-text">Categories</b>
+      </span>
+    </mat-label>
+    <mat-select [(ngModel)]="categories" placeholder="Categories" multiple>
+      <mat-option *ngFor="let category of data.categories" [value]="category.id">
+        <i [className]="category.icon"></i>
+        {{category.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>
+      <span fxLayoutAlign="start center">
+        <i class="fas fa-rss fa-sm"></i>
+        <b class="icon-text">Publishers</b>
+      </span>
+    </mat-label>
+    <mat-select [(ngModel)]="publishers" placeholder="Publishers" multiple>
+      <mat-option *ngFor="let publisher of data.publishers" [value]="publisher.id">
+        {{publisher.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center">
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="warn" (click)="reset()">Reset</button>
+  <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+</div>

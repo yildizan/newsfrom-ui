@@ -1,0 +1,14 @@
+*
+
+!.gitignore
+!LICENSE.md
+!README.md
+!angular.json
+
+!src
+src/*
+
+!src/index.html
+!src/styles.scss
+!src/app/
+!src/app/**

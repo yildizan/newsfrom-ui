@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto' !important;
+}
+
+.map-container {
+    width: 100%;
+    height: 100%;
+}
+
+.silent-link {
+    color: inherit;
+}
+
+.read-title {
+    color: #ABB2B9;
+}
+
+.icon-text {
+    margin-left: 0.1em;
+}
+
+.white-bg {
+    background-color: white !important;
+}

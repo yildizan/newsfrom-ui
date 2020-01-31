@@ -1,0 +1,39 @@
+.marker-window .thumbnail {
+  border-radius: 4px 4px 0px 0px;
+}
+
+mat-card.marker-window {
+  padding: 0;
+}
+
+@media all and (orientation: landscape) {
+  .marker-window {
+    max-width: 30vw;
+    max-height: 80vh;
+
+    .header {
+      font-size: 0.8em;
+    }
+    
+    .text-wrapper {
+      font-size: 0.9em;
+      padding: 0.5vw;
+    }
+  }
+}
+
+@media all and (orientation: portrait) {
+  .marker-window {
+    max-width: 70vw;
+    max-height: 80vh;
+
+    .header {
+      font-size: 0.6em;
+    }
+    
+    .text-wrapper {
+      font-size: 0.7em;
+      padding: 0.5vh;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>Settings</h1>
+<div mat-dialog-content class="container" fxLayout="column">
+  <div fxFlex="50" fxLayoutAlign="center center" fxLayout="row" fxFill>
+    <mat-form-field>
+      <mat-label>
+        <span fxLayoutAlign="start center">
+          <i class="fas fa-map-marker-alt"></i>
+          <b class="icon-text">Location</b>
+        </span>
+      </mat-label>
+      <mat-select [(ngModel)]="defaultLocationId" placeholder="Location">
+        <mat-option *ngFor="let location of locations" [value]="location.id">
+          {{location.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!--
+    <button fxFlex="20" mat-icon-button (click)="locate()">
+      <mat-icon>my_location</mat-icon>
+    </button>
+    -->
+  </div>
+  <div fxFlex="50" fxLayout="row" fxLayoutAlign="start center">
+    <div fxFlex="40">
+      <mat-label>Zoom</mat-label>
+    </div>
+    <div fxFlex="60" fxLayoutAlign="center center">
+      <mat-slider min="1" max="10" step="1" thumbLabel="true"
+        color="primary" [(ngModel)]="defaultZoom"></mat-slider>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions fxLayoutAlign="center">
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="warn" (click)="reset()">Reset</button>
+  <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+</div>

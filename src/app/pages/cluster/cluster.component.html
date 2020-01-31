@@ -1,0 +1,71 @@
+<div class="container">
+  <mat-accordion class="cluster-window" fxLayout="column" fxLayoutGap="1vh">
+    <mat-expansion-panel *ngFor="let category of categories" fxFlex="100" [hideToggle]="true">
+      <mat-expansion-panel-header class="category-wrapper" [style.background-image]="styleBackground(category.id)"
+      [collapsedHeight]="'inherit'" [expandedHeight]="'inherit'" fxFill>
+        <div fxLayoutAlign="center center" fxFill>
+          <span class="category-header" fxLayoutAlign="start center" fxLayoutGap="0.5vw">
+            <i [className]="category.icon"></i>
+            <span><b>{{category.name}}</b></span>
+            <i class="fas fa-chevron-down fa-sm"></i>
+          </span>
+        </div>
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <mat-accordion class="category-content" fxLayout="column" fxLayoutGap="1vh">
+          <mat-expansion-panel *ngFor="let news of list.get(category.id)" fxFlex="100" (opened)="onExpand(news)">
+            <mat-expansion-panel-header [collapsedHeight]="'inherit'" [expandedHeight]="'inherit'" fxFill>
+              <div class="content-wrapper" fxLayout="row" fxFill>
+                <div fxFlex="20">
+                  <img class="thumbnail" src="{{news.thumbnailUrl}}" fxFill>
+                </div>
+                <div class="text-wrapper" fxFlex="80">
+                  <b fxLayoutAlign="start center" [ngClass]="{'read-title': news.isRead}" fxFill>{{news.title}}</b>
+                </div>
+              </div>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+              <div class="header">
+                <div fxLayoutGap="1vmin">
+                  <div>
+                    <span fxLayoutAlign="start center">
+                      <i class="fas fa-map-marker-alt fa-sm"></i>
+                      <span class="icon-text">{{news.location}}</span>
+                    </span>
+                  </div>
+                  <div>
+                    <span fxLayoutAlign="start center">
+                      <i class="fas fa-rss fa-sm"></i>
+                      <span class="icon-text">{{news.publisher}}</span>
+                    </span>
+                  </div>
+                  <div>
+                    <span fxLayoutAlign="start center">
+                      <i class="fas fa-clock fa-sm"></i>
+                      <span class="icon-text">{{news.publishDate | date: 'd.M.yyyy HH:mm z'}}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <p>{{news.description}}</p>
+              <div class="footer" fxLayoutAlign="center center" fxLayoutGap="1vh">
+                <button class="white-bg" mat-mini-fab matTooltip="Link" ngxClipboard [cbContent]="'http://newsfrom.news/' + news.id" (cbOnSuccess)="notifyCopy()">
+                  <i class="fas fa-link"></i>
+                </button>
+                <a class="white-bg" mat-mini-fab matTooltip="Post" href="{{facebookUrl + news.id}}" target="_blank">
+                  <i class="fab fa-facebook-f" style="color: #3C5A99"></i>
+                </a>
+                <a class="white-bg" mat-mini-fab matTooltip="Tweet" href="{{twitterUrl + news.id}}" target="_blank">
+                  <i class="fab fa-twitter" style="color: #1DA1F2"></i>
+                </a>
+                <a class="white-bg" mat-mini-fab matTooltip="Go" href="{{news.link}}" target="_blank">
+                  <i class="fas fa-external-link-alt"></i>
+                </a>
+              </div>
+            </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-template>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

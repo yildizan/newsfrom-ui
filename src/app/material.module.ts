@@ -13,7 +13,8 @@ import {
   MatSliderModule,
   MatRadioModule,
   MatTooltipModule,
-  MatChipsModule
+  MatChipsModule,
+  MatCheckboxModule
 } from '@angular/material';
 
 @NgModule({
@@ -30,7 +31,8 @@ import {
     MatSliderModule,
     MatRadioModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
+    MatCheckboxModule
   ]
 })
 

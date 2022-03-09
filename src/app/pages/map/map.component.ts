@@ -1,23 +1,22 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, HostListener, isDevMode } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
-import { CategoryService } from 'src/app/service/category.service';
 import { NewsService } from 'src/app/service/news.service';
-import { PublisherService } from 'src/app/service/publisher.service';
-import { MAP_OPTIONS } from 'src/app/options/map-options';
+import { MapUtils, MAP_OPTIONS } from 'src/app/options/map-options';
 import * as Const from 'src/app/options/const-options';
 import { MarkerComponent } from 'src/app/pages/marker/marker.component';
 import { ClusterComponent } from 'src/app/pages/cluster/cluster.component';
-import { FilterData, FilterComponent } from 'src/app/pages/filter/filter.component';
-import { SettingsData, SettingsComponent } from 'src/app/pages/settings/settings.component';
+import { FilterComponent } from 'src/app/pages/filter/filter.component';
 import { InfoComponent } from 'src/app/pages/info/info.component';
 import { CookieComponent } from 'src/app/pages/cookie/cookie.component';
-import { Filter } from 'src/app/model/filter';
 import { Category } from 'src/app/model/category';
 import { Publisher } from 'src/app/model/publisher';
-import { Location } from 'src/app/model/location';
 import { News } from 'src/app/model/news';
 import { CookieService } from 'ngx-cookie-service';
 import { ActivatedRoute } from '@angular/router';
+import { FilterableModel } from 'src/app/model/base';
+import { FeedService } from 'src/app/service/feed.service';
+import { Feed } from 'src/app/model/feed';
+import { FilterPayload } from 'src/app/model/dialog';
 
 declare var L: any;
 
@@ -33,16 +32,17 @@ export class MapComponent implements OnInit {
   map: any;
   cluster: any;
   markers: any;
-  categories: Category[] = [];
-  publishers: Publisher[] = [];
+
+  feeds: Feed[] = [];
+  categories: Map<Number, Category> = new Map();
+  publishers: Map<Number, Publisher> = new Map();
+  newsList: News[] = [];
+
+  readIds: Set<Number> = new Set();
   keywords: string[] = [];
-  news: News[];
-  defaultLocation = Const.DEFAULT_LOCATION;
-  defaultZoom = Const.DEFAULT_ZOOM;
 
   constructor(
-    private categoryService: CategoryService,
-    private publisherService: PublisherService,
+    private feedService: FeedService,
     private newsService: NewsService,
     private cookieService: CookieService,
     private dialog: MatDialog,
@@ -52,87 +52,88 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     this.initMap();
-    this.categoryService.list().subscribe(response => {
-      this.categories = response;
-      if(!this.filterWithCookie(Const.CATEGORY_COOKIE, this.categories)) {
-        this.categories.forEach(c => c.selected = true);
+    this.feedService.fetch().subscribe(feeds => {
+      this.feeds = feeds;
+      this.init(feeds);
+    });
+
+    this.route.paramMap.subscribe(params => {
+      let id = +params.get('id');
+      if(id) {
+        this.newsService.get(id).subscribe(n => this.openParam(n));
       }
     });
-    this.publisherService.list().subscribe(response => {
-      this.publishers = response;
-      if(!this.filterWithCookie(Const.PUBLISHER_COOKIE, this.publishers)) {
-        this.publishers.forEach(p => p.selected = true);
-      }
-    });
-    this.newsService.list().subscribe(response => {
-      this.news = response;
-      this.news.forEach((n, i) => n.index = i);
-      this.checkRead();
-      this.applyFilter();
-      this.route.paramMap.subscribe(params => {
-        let id = +params.get('id');
-        if(id) {
-          this.newsService.get(id).subscribe(n => this.openParam(n));
-        }
-      });
-    });
-    if(!this.cookieService.check(Const.NOTIFICATION_COOKIE)) {
-      this.snackBar.openFromComponent(CookieComponent).afterDismissed().subscribe(
-        () => this.cookieService.set(Const.NOTIFICATION_COOKIE, '')
-      );
-    }
-  }
 
-  filterWithCookie(name: string, collection: Filter[]): boolean {
-    if(this.cookieService.check(name)) {
-      let filters = this.cookieService.get(name).split(';');
-      collection.forEach(c => c.selected = filters.some(f => c.id.toString() == f));
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-
-  locateWithCookie(): void {
-    if(this.cookieService.check(Const.LOCATION_COOKIE)) {
-      let tokens = this.cookieService.get(Const.LOCATION_COOKIE).split(Const.COOKIE_SEPARATOR);
-      let location = new Location();
-      location.id = +tokens[0];
-      location.latitude = +tokens[1];
-      location.longitude = +tokens[2];
-      this.defaultLocation = location;
-    }
-    if(this.cookieService.check(Const.ZOOM_COOKIE)) {
-      this.defaultZoom = +this.cookieService.get(Const.ZOOM_COOKIE);
-    }
-  }
-
-  setDefaultView() {
-    this.map.setView([this.defaultLocation.latitude, this.defaultLocation.longitude],
-      this.defaultZoom + 1);
+    this.showCookieNotification();
   }
 
   initMap() {
     this.map = L.map('map');
     L.tileLayer(Const.MAP_API, MAP_OPTIONS).addTo(this.map);
-    L.easyButton('<i class="fas fa-search"></i>', () => this.openFilter()).addTo(this.map);
-    L.easyButton('<i class="fas fa-cog"></i>', () => this.openSettings()).addTo(this.map);
+    L.easyButton('<i class="fas fa-filter"></i>', () => this.openFilter()).addTo(this.map);
     L.easyButton('<i class="fas fa-info"></i>', () => this.openInfo()).addTo(this.map);
-    this.locateWithCookie();
-    this.setDefaultView();
+    this.map.setView([Const.DEFAULT_LATITUDE, Const.DEFAULT_LONGITUDE], Const.DEFAULT_ZOOM);
   }
 
-  initMarkers(list: News[]) {
+  recoverReadNews() {
+    let readNewsCookie = this.cookieService.get(Const.READ_NEWS_COOKIE);
+
+    if (readNewsCookie) {
+      try {
+        let readIds: number[] = JSON.parse(readNewsCookie);
+        this.readIds = new Set(readIds);
+      } catch (err) {
+        if (isDevMode()) {
+          console.log(err);
+        }
+      }
+    }
+  }
+
+  init(feeds: Feed[]) {
+    for (let feed of feeds) {
+      this.categories.set(feed.category.id, feed.category);
+      this.publishers.set(feed.publisher.id, feed.publisher);
+    }
+
+    for (let category of this.categories.values()) {
+      this.categories.set(category.id, new Category(category));
+    }
+    for (let publisher of this.publishers.values()) {
+      this.publishers.set(publisher.id, new Publisher(publisher));
+    }
+
+    this.recoverReadNews();
+    this.initNews(feeds);
+  }
+
+  initNews(feeds: Feed[]) {
+    this.newsList = [];
+    for (let feed of feeds) {
+      for (let news of feed.newsList) {
+        news.categoryId = feed.category.id;
+        news.publisherName = feed.publisher.name;
+        news.index = this.newsList.length;
+        news.isRead = this.readIds.has(news.id);
+
+        this.newsList.push(news);
+      }
+    }
+
+    this.initMarkers();
+    this.initCluster();
+  }
+
+  initMarkers() {
     this.markers = [];
 
     let unreadIcon = L.icon(Const.UNREAD_ICON);
     let readIcon = L.icon(Const.READ_ICON);
 
-    for(let news of list) {
+    for (let news of this.newsList) {
       this.markers.push(
         L.marker(
-          [news.latitude, news.longitude],
+          [news.location.latitude, news.location.longitude],
           {
             icon: news.isRead ? readIcon : unreadIcon,
             index: news.index
@@ -143,19 +144,11 @@ export class MapComponent implements OnInit {
   }
 
   initCluster() {
-    if(this.cluster == null) {
+    if (this.cluster == null) {
       this.cluster = new L.markerClusterGroup({
         iconCreateFunction: function(cluster) {
           let count = cluster.getChildCount();
-        
-          let i = 0;
-
-          if (count < 10) i = 1;
-          else if (count < 50) i = 2;
-          else if (count < 100) i = 3;
-          else if (count < 250) i = 4;
-          else i = 5;
-
+          let i = MapUtils.defineCluster(count);
           let html = `<span class="badge badge-${i}" data-count="${count}" />`;
         
           return new L.DivIcon({
@@ -168,8 +161,7 @@ export class MapComponent implements OnInit {
       });
       this.cluster.on('clusterclick', (e) => this.onClusterClick(e));
       this.map.addLayer(this.cluster);
-    }
-    else {
+    } else {
       this.cluster.clearLayers();
     }
 
@@ -177,18 +169,16 @@ export class MapComponent implements OnInit {
   }
 
   onMarkerClick(e) {
-    let news = this.news[e.target.options.index];
-    news.category = this.findName(this.categories, news.categoryId);
-    news.publisher = this.findName(this.publishers, news.publisherId);
+    let news = this.newsList[e.target.options.index];
 
     // open popup
     this.dialog.open(MarkerComponent,
       { data: news, panelClass: 'speech-bubble', autoFocus: false }
     );
-    this.map.panTo(L.latLng(news.latitude, news.longitude), { duration: Const.ANIMATION_DURATION });
+    this.map.panTo(L.latLng(news.location.latitude, news.location.longitude), { duration: Const.ANIMATION_DURATION });
 
     // update icon
-    if(!news.isRead) {
+    if (!news.isRead) {
       let icon = L.icon(Const.READ_ICON);
       e.target.setIcon(icon);
       news.isRead = true;
@@ -196,122 +186,101 @@ export class MapComponent implements OnInit {
   }
 
   onClusterClick(e) {
-    let list: News[] = [];
-    for(let marker of e.layer.getAllChildMarkers()) {
-      let news = this.news[marker.options.index];
-      news.category = this.findName(this.categories, news.categoryId);
-      news.publisher = this.findName(this.publishers, news.publisherId);
-      list.push(news);
-    }
-    let categories = this.categories.filter(c => list.some(l => l.categoryId == c.id));
-    this.dialog.open(ClusterComponent,
-      { data: { news: list, categories: categories } , panelClass: 'speech-bubble', autoFocus: false }
-    );
-    this.map.panTo(L.latLng(list[0].latitude, list[0].longitude), { duration: Const.ANIMATION_DURATION });
-  }
+    let categoryMap: Map<Number, Category> = new Map();
+    for (let marker of e.layer.getAllChildMarkers()) {
+      var news = this.newsList[marker.options.index];
+      let category = categoryMap.get(news.categoryId);
 
-  findName(list: Filter[], id: number): string {
-    return list.find(x => x.id == id).name;
+      if (category == null) {
+        categoryMap.set(news.categoryId, this.categories.get(news.categoryId));
+        category = categoryMap.get(news.categoryId);
+        category.newsList = [];
+      }
+      category.newsList.push(news);
+    }
+
+    let categories = [...categoryMap.values()];
+
+    this.dialog.open(ClusterComponent,
+      { data: categories, panelClass: 'speech-bubble', autoFocus: false }
+    );
+    this.map.panTo(L.latLng(news.location.latitude, news.location.longitude), { duration: Const.ANIMATION_DURATION });
   }
 
   openFilter() {
-    let data = new FilterData(this.categories, this.publishers, this.keywords);
+    let categories = [...this.categories.values()];
+    let publishers = [...this.publishers.values()];
+    let data = new FilterPayload(categories, publishers, this.keywords);
     const dialogRef = this.dialog.open(FilterComponent,
       { data: data, autoFocus: false }
     );
     dialogRef.afterClosed().subscribe(filter => {
-      if(filter && filter.categories != null && filter.publishers != null) {
-        this.categories.forEach(c => c.selected = filter.categories.some(f => c.id == f));
-        this.publishers.forEach(p => p.selected = filter.publishers.some(f => p.id == f));
+      if (filter instanceof FilterPayload) {
+        this.syncVisibility(filter.categories, this.categories);
+        this.syncVisibility(filter.publishers, this.publishers);
         this.keywords = filter.keywords;
-        this.applyFilter();
-        // save cookie
-        this.cookieService.set(Const.CATEGORY_COOKIE, filter.categories.join(Const.COOKIE_SEPARATOR));
-        this.cookieService.set(Const.PUBLISHER_COOKIE, filter.publishers.join(Const.COOKIE_SEPARATOR));
+        this.applyFilters();
       }
     });
   }
 
-  applyFilter() {
-    let news = this.news.filter(n => 
-      this.categories.some(c => c.selected && c.id == n.categoryId) &&
-      this.publishers.some(p => p.selected && p.id == n.publisherId)
-    );
-    if(this.keywords.length > 0) {
-      news = news.filter(n => 
-        this.keywords.some(k => n.description.toLowerCase().includes(k.toLowerCase())) ||
-        this.keywords.some(k => n.title.toLowerCase().includes(k.toLowerCase()))
-      );
+  syncVisibility(source: FilterableModel[], target: Map<Number, FilterableModel>) {
+    for (let entry of target.values()) {
+      entry.visible = false;
     }
-    this.initMarkers(news);
-    this.initCluster();
+    for (let model of source) {
+      target.get(model.id).visible = true;
+    }
   }
 
-  openSettings() {
-    let data = new SettingsData(this.defaultLocation, this.defaultZoom);
-    const dialogRef = this.dialog.open(SettingsComponent,
-      { data: data, autoFocus: false }
+  applyFilters() {
+    let feeds = this.feeds.filter(f => 
+      this.categories.get(f.category.id).visible &&
+      this.publishers.get(f.publisher.id).visible
     );
-    dialogRef.afterClosed().subscribe(settings => {
-      if(settings != null) {
-        this.defaultLocation = settings.location != null ? settings.location : Const.DEFAULT_LOCATION;
-        this.defaultZoom = settings.zoom != null ? settings.zoom : Const.DEFAULT_ZOOM;
-        this.setDefaultView();
-        // save cookie
-        this.cookieService.set(Const.LOCATION_COOKIE,
-          this.defaultLocation.id.toString()
-            .concat(Const.COOKIE_SEPARATOR + this.defaultLocation.latitude)
-            .concat(Const.COOKIE_SEPARATOR + this.defaultLocation.longitude)
-        );
-        this.cookieService.set(Const.ZOOM_COOKIE, this.defaultZoom.toString());
-      }
-    });
+
+    this.initNews(feeds);
   }
 
   openInfo() {
     this.dialog.open(InfoComponent, { autoFocus: false });
   }
 
-  @HostListener('window:unload')
-  saveRead() {
-    let read = this.news.filter(n => n.isRead);
-    if(read.length > 0) {
-      this.cookieService.set(Const.VERSION_COOKIE, read[0].versionNo.toString());
-      this.cookieService.set(Const.READ_COOKIE, read.map(r => r.id).join(Const.COOKIE_SEPARATOR));
+  showCookieNotification() {
+    if (!this.cookieService.check(Const.NOTIFICATION_COOKIE)) {
+      this.snackBar.openFromComponent(CookieComponent).afterDismissed().subscribe(
+        () => this.cookieService.set(Const.NOTIFICATION_COOKIE, 'notified', null, null, null, true)
+      );
     }
   }
 
-  checkRead() {
-    if(this.cookieService.check(Const.READ_COOKIE) && +this.cookieService.get(Const.VERSION_COOKIE) == this.news[0].versionNo) {
-      let read = this.cookieService.get(Const.READ_COOKIE).split(Const.COOKIE_SEPARATOR);
-      read.forEach(r => this.news.find(n => n.id == +r).isRead = true);
-    }
-    else {
-      this.cookieService.delete(Const.READ_COOKIE);
-      this.cookieService.delete(Const.VERSION_COOKIE);
+  @HostListener('window:beforeunload')
+  saveReadNews() {
+    let readNews = this.newsList.filter(n => n.isRead);
+    if (readNews.length > 0) {
+      this.cookieService.set(Const.READ_NEWS_COOKIE, JSON.stringify(readNews.map(r => r.id)), null, null, null, true);
     }
   }
 
   openParam(news: News) {
     // out of date
-    if(news == null) {
+    if (news == null) {
       this.snackBar.open('❌ This news is out of date.', null, { duration: Const.NOTIFICATION_DURATION });
       return;
     }
-
-    news.category = this.findName(this.categories, news.categoryId);
-    news.publisher = this.findName(this.publishers, news.publisherId);
 
     // open popup
     this.dialog.open(MarkerComponent,
       { data: news, panelClass: 'speech-bubble', autoFocus: false }
     );
-    this.map.panTo(L.latLng(news.latitude, news.longitude), { duration: Const.ANIMATION_DURATION });
+    this.map.panTo(L.latLng(news.location.latitude, news.location.longitude), { duration: Const.ANIMATION_DURATION });
 
+    /*
     // archived
-    if(news.versionNo < this.news[0].versionNo) {
+    if (news.versionNo < this.newsList[0].versionNo) {
       this.snackBar.open('⚠️ This news is archived.', null, { duration: Const.NOTIFICATION_DURATION });
     }
+    */
   }
 
 }

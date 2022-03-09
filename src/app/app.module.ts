@@ -11,9 +11,8 @@ import 'hammerjs';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
+import { FeedService } from './service/feed.service';
 import { NewsService } from './service/news.service';
-import { CategoryService } from './service/category.service';
-import { PublisherService } from './service/publisher.service';
 import { MapComponent } from './pages/map/map.component';
 import { MarkerComponent } from './pages/marker/marker.component';
 import { ClusterComponent } from './pages/cluster/cluster.component';
@@ -45,9 +44,8 @@ import { CookieComponent } from './pages/cookie/cookie.component';
     ClipboardModule
   ],
   providers: [
-    CategoryService,
+    FeedService,
     NewsService,
-    PublisherService,
     CookieService
   ],
   entryComponents: [

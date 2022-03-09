@@ -1,8 +1,15 @@
 .cluster-window {
-  overflow: auto;
 
   .thumbnail {
     border-radius: 3px 0px 0px 3px;
+  }
+
+  .header div {
+    display: inline-block;
+  }
+
+  .category-wrapper {
+    overflow-y: auto;
   }
 
   mat-expansion-panel {
@@ -18,7 +25,7 @@
       }
     }
 
-    .category-wrapper {
+    .category-header {
         padding-top: 10px;
         padding-bottom: 10px;
         background-size: cover !important;
@@ -45,10 +52,6 @@
 
     .header {
       font-size: 0.8em;
-      
-      div {
-        display: inline-block;
-      }
     }
 
     .text-wrapper {
@@ -66,10 +69,6 @@
     
     .header {
       font-size: 0.8em;
-
-      div {
-        display: inline-block;
-      }
     }
   }
 }

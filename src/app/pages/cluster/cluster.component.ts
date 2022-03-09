@@ -15,20 +15,16 @@ export class ClusterComponent implements OnInit {
 
   facebookUrl: string = Const.FACEBOOK_SHARE_URL;
   twitterUrl: string = Const.TWITTER_SHARE_URL;
-  categories: Category[] = [];
   list: Map<Number, News[]> = new Map();
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public categories: Category[],
     private snackBar: MatSnackBar,
     private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
-    this.categories = this.data.categories.sort((a, b) => (a.displayOrder > b.displayOrder) ? 1 : -1);
-    for(let category of this.data.categories) {
-      this.list.set(+category.id, this.data.news.filter(n => n.categoryId == category.id));
-    }
+    this.categories.sort((a, b) => (a.displayOrder > b.displayOrder) ? 1 : -1);
   }
 
   notifyCopy() {

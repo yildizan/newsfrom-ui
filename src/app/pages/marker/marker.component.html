@@ -1,42 +1,42 @@
 <div class="container">
   <mat-card class="marker-window mat-elevation-z2">
     <div class="content-wrapper" fxLayout="column">
-      <img class="thumbnail" src="{{data.thumbnailUrl}}" fxFlex="50" fxFill>
+      <img class="thumbnail" src="{{news.thumbnailUrl}}" fxFlex="50" fxFill>
       <div class="text-wrapper" fxFlex="50" fxFill>
         <div class="header">
           <div>
             <span fxLayoutAlign="start center">
               <i class="fas fa-map-marker-alt fa-sm"></i>
-              <span class="icon-text">{{data.location}}</span>
+              <span class="icon-text">{{news.location.name}}</span>
             </span>
           </div>
           <div>
             <span fxLayoutAlign="start center">
               <i class="fas fa-rss fa-sm"></i>
-              <span class="icon-text">{{data.publisher}}</span>
+              <span class="icon-text">{{news.publisherName}}</span>
             </span>
           </div>
           <div>
             <span fxLayoutAlign="start center">
               <i class="fas fa-clock fa-sm"></i>
-              <span class="icon-text">{{data.publishDate | date: 'd.M.yyyy HH:mm z'}}</span>
+              <span class="icon-text">{{news.publishDate | date: 'd.M.yyyy HH:mm z'}}</span>
             </span>
           </div>
         </div>
         <br />
-        <b>{{data.title}}</b>
-        <p>{{data.description}}</p>
+        <b>{{news.title}}</b>
+        <p>{{news.description}}</p>
         <div class="footer" fxLayoutAlign="center center" fxLayoutGap="1vmin">
-          <button class="white-bg" mat-mini-fab matTooltip="Link" ngxClipboard [cbContent]="'http://newsfrom.news/' + data.id" (cbOnSuccess)="notifyCopy()">
+          <button class="white-bg" mat-mini-fab matTooltip="Link" ngxClipboard [cbContent]="'http://newsfrom.news/' + news.id" (cbOnSuccess)="notifyCopy()">
             <i class="fas fa-link"></i>
           </button>
-          <a class="white-bg" mat-mini-fab matTooltip="Post" href="{{facebookUrl + data.id}}" target="_blank">
+          <a class="white-bg" mat-mini-fab matTooltip="Post" href="{{facebookUrl + news.id}}" target="_blank">
             <i class="fab fa-facebook-f" style="color: #3C5A99"></i>
           </a>
-          <a class="white-bg" mat-mini-fab matTooltip="Tweet" href="{{twitterUrl + data.id}}" target="_blank">
+          <a class="white-bg" mat-mini-fab matTooltip="Tweet" href="{{twitterUrl + news.id}}" target="_blank">
             <i class="fab fa-twitter" style="color: #1DA1F2"></i>
           </a>
-          <a class="white-bg" mat-mini-fab matTooltip="Go" href="{{data.link}}" target="_blank">
+          <a class="white-bg" mat-mini-fab matTooltip="Go" href="{{news.link}}" target="_blank">
             <i class="fas fa-external-link-alt"></i>
           </a>
         </div>

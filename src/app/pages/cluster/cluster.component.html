@@ -1,10 +1,10 @@
 <div class="container">
   <mat-accordion class="cluster-window" fxLayout="column" fxLayoutGap="1vh">
-    <mat-expansion-panel *ngFor="let category of categories" fxFlex="100" [hideToggle]="true">
-      <mat-expansion-panel-header class="category-wrapper" [style.background-image]="styleBackground(category.id)"
+    <mat-expansion-panel *ngFor="let category of categories" class="category-wrapper" fxFlex="100" [hideToggle]="true">
+      <mat-expansion-panel-header class="category-header" [style.background-image]="styleBackground(category.id)"
       [collapsedHeight]="'inherit'" [expandedHeight]="'inherit'" fxFill>
         <div fxLayoutAlign="center center" fxFill>
-          <span class="category-header" fxLayoutAlign="start center" fxLayoutGap="0.5vw">
+          <span fxLayoutAlign="start center" fxLayoutGap="0.5vw">
             <i [className]="category.icon"></i>
             <span><b>{{category.name}}</b></span>
             <i class="fas fa-chevron-down fa-sm"></i>
@@ -13,7 +13,7 @@
       </mat-expansion-panel-header>
       <ng-template matExpansionPanelContent>
         <mat-accordion class="category-content" fxLayout="column" fxLayoutGap="1vh">
-          <mat-expansion-panel *ngFor="let news of list.get(category.id)" fxFlex="100" (opened)="onExpand(news)">
+          <mat-expansion-panel *ngFor="let news of category.newsList" fxFlex="100" (opened)="onExpand(news)">
             <mat-expansion-panel-header [collapsedHeight]="'inherit'" [expandedHeight]="'inherit'" fxFill>
               <div class="content-wrapper" fxLayout="row" fxFill>
                 <div fxFlex="20">
@@ -30,13 +30,13 @@
                   <div>
                     <span fxLayoutAlign="start center">
                       <i class="fas fa-map-marker-alt fa-sm"></i>
-                      <span class="icon-text">{{news.location}}</span>
+                      <span class="icon-text">{{news.location.name}}</span>
                     </span>
                   </div>
                   <div>
                     <span fxLayoutAlign="start center">
                       <i class="fas fa-rss fa-sm"></i>
-                      <span class="icon-text">{{news.publisher}}</span>
+                      <span class="icon-text">{{news.publisherName}}</span>
                     </span>
                   </div>
                   <div>

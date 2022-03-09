@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { News } from 'src/app/model/news';
 import * as Const from 'src/app/options/const-options';
 
 @Component({
@@ -13,7 +14,7 @@ export class MarkerComponent {
   twitterUrl: string = Const.TWITTER_SHARE_URL;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public news: News,
     private snackBar: MatSnackBar
   ) { }
 

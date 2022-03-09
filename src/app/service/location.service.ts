@@ -13,4 +13,5 @@ export class LocationService {
   list() {
     return this.http.get<Location[]>(`${environment.apiUrl}/location/country`);
   }
+  
 }

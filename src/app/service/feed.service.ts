@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Category } from '../model/category';
 import { environment } from 'src/environments/environment';
+import { Feed } from '../model/feed';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
+export class FeedService {
 
   constructor(private http : HttpClient) { }
 
-  list() {
-    return this.http.get<Category[]>(`${environment.apiUrl}/category/list`);
+  fetch() {
+    return this.http.get<Feed[]>(`${environment.apiUrl}/feed`);
   }
+
 }

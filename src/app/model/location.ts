@@ -1,11 +1,8 @@
-import { Filter } from './filter';
+import { BaseModel } from "./base";
 
-export class Location extends Filter {
-  latitude?: number;
-  longitude?: number;
+export class Location extends BaseModel {
 
-  public constructor(init?: Partial<Location>) {
-    super(init);
-    Object.assign(this, init);
-  }
+  latitude: number;
+  longitude: number;
+
 }

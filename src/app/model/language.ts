@@ -1,4 +1,5 @@
-export class Language {
-    id: number;
-    name: string;
+import { BaseModel } from "./base";
+
+export class Language extends BaseModel {
+
 }

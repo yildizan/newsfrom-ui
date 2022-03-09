@@ -1,23 +1,6 @@
-import { Location } from '../model/location';
-
 // cookie
-export const COOKIE_SEPARATOR: string = ';';
-export const CATEGORY_COOKIE: string = 'categories';
-export const PUBLISHER_COOKIE: string = 'publishers';
-export const LOCATION_COOKIE: string = 'location';
-export const ZOOM_COOKIE: string = 'zoom';
 export const NOTIFICATION_COOKIE: string = 'notification';
-export const VERSION_COOKIE: string = 'version';
-export const READ_COOKIE: string = 'read';
-
-// location
-export const DEFAULT_LOCATION: Location = {
-  // Turkey
-  id: 219,
-  latitude: 39.91987000,
-  longitude: 32.85427000
-};
-export const DEFAULT_ZOOM = 2;
+export const READ_NEWS_COOKIE: string = 'read-news';
 
 // duration
 export const ANIMATION_DURATION = 0.8;
@@ -48,5 +31,8 @@ export const TWITTER_SHARE_URL = 'https://twitter.com/intent/tweet?' +
   'hashtags=newsfrom,news&' +
   'url=http%3A%2F%2Fnewsfrom.news%2F';
 
-// api
+// map
 export const MAP_API = 'https://api.mapbox.com/styles/v1/yildizan/cjzfop7z51bop1cmvns8ekqa4/tiles/256/{z}/{x}/{y}?access_token={accessToken}';
+export const DEFAULT_LATITUDE = 30.0;
+export const DEFAULT_LONGITUDE = 10.0;
+export const DEFAULT_ZOOM = 3;

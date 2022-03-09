@@ -5,7 +5,10 @@ import { Location } from 'src/app/model/location';
 import * as Const from 'src/app/options/const-options';
 
 export class SettingsData {
-  constructor(public location: Location, public zoom: number) {}
+  constructor(
+    public location: Location,
+    public zoom: number
+  ) {}
 };
 
 @Component({
@@ -58,8 +61,7 @@ export class SettingsComponent implements OnInit {
             id: 0,
             latitude: success.coords.latitude,
             longitude: success.coords.longitude,
-            name: 'My Location',
-            selected: true
+            name: 'My Location'
           });
         }
         this.defaultLocationId = 0;
@@ -71,8 +73,8 @@ export class SettingsComponent implements OnInit {
   }
 
   reset() {
-    this.defaultLocationId = Const.DEFAULT_LOCATION.id;
-    this.defaultZoom = Const.DEFAULT_ZOOM;
+    //this.defaultLocationId = Const.DEFAULT_LOCATION.id;
+    //this.defaultZoom = Const.DEFAULT_ZOOM;
   }
 
   submit() {

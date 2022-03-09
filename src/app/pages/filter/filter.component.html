@@ -17,8 +17,8 @@
         <b class="icon-text">Categories</b>
       </span>
     </mat-label>
-    <mat-select [(ngModel)]="categories" placeholder="Categories" multiple>
-      <mat-option *ngFor="let category of data.categories" [value]="category.id">
+    <mat-select [(ngModel)]="selectedCategories" placeholder="Categories" multiple>
+      <mat-option *ngFor="let category of input.categories" [value]="category">
         <i [className]="category.icon"></i>
         {{category.name}}
       </mat-option>
@@ -31,8 +31,8 @@
         <b class="icon-text">Publishers</b>
       </span>
     </mat-label>
-    <mat-select [(ngModel)]="publishers" placeholder="Publishers" multiple>
-      <mat-option *ngFor="let publisher of data.publishers" [value]="publisher.id">
+    <mat-select [(ngModel)]="selectedPublishers" placeholder="Publishers" multiple>
+      <mat-option *ngFor="let publisher of input.publishers" [value]="publisher">
         {{publisher.name}}
       </mat-option>
     </mat-select>

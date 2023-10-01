@@ -5,7 +5,7 @@ export const MAP_OPTIONS = {
   | <a href="assets/static/terms.html" target="_blank">Terms &amp; Conditions</a>
   | <a href="assets/static/privacy.html" target="_blank">Privacy Policy</a>`,
   maxZoom: 9,
-  minZoom: 2,
+  minZoom: 4,
   noWrap: true,
   detectRetina: true,
   bounds: [[-180, -180],[180,180]],

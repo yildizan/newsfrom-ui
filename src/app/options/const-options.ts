@@ -35,4 +35,4 @@ export const TWITTER_SHARE_URL = 'https://twitter.com/intent/tweet?' +
 export const MAP_API = 'https://api.mapbox.com/styles/v1/yildizan/cjzfop7z51bop1cmvns8ekqa4/tiles/256/{z}/{x}/{y}?access_token={accessToken}';
 export const DEFAULT_LATITUDE = 30.0;
 export const DEFAULT_LONGITUDE = 10.0;
-export const DEFAULT_ZOOM = 3;
+export const DEFAULT_ZOOM = 4;

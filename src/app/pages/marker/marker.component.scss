@@ -1,5 +1,6 @@
 .marker-window .thumbnail {
   border-radius: 4px 4px 0px 0px;
+  max-height: 40vh;
 }
 
 mat-card.marker-window {
@@ -28,11 +29,11 @@ mat-card.marker-window {
     max-height: 80vh;
 
     .header {
-      font-size: 0.6em;
+      font-size: 0.7em;
     }
     
     .text-wrapper {
-      font-size: 0.7em;
+      font-size: 0.8em;
       padding: 0.5vh;
     }
   }

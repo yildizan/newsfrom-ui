@@ -2,6 +2,7 @@
 
   .thumbnail {
     border-radius: 3px 0px 0px 3px;
+    max-height: 10vh;
   }
 
   .header div {
@@ -29,6 +30,7 @@
         padding-top: 10px;
         padding-bottom: 10px;
         background-size: cover !important;
+        font-size: 1.1em;
     }
 
     .category-content {
@@ -55,7 +57,7 @@
     }
 
     .text-wrapper {
-      font-size: 0.9em;
+      font-size: 1em;
     }
   }
 }

@@ -262,11 +262,13 @@ export class MapComponent implements OnInit {
     }
   }
 
-  openParam(news: News) {
+  openParam(news) {
     // out of date
     if (news == null) {
       this.snackBar.open('❌ This news is out of date.', null, { duration: Const.NOTIFICATION_DURATION });
       return;
+    } else {
+      news.publisherName = news.publisher.name;
     }
 
     // open popup

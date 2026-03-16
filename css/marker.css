@@ -1,0 +1,47 @@
+/* Marker modal styles — replaces marker.component.scss */
+.marker-window .thumbnail {
+  border-radius: 4px 4px 0 0;
+  max-height: 40vh;
+  width: 100%;
+  object-fit: cover;
+}
+
+.marker-window {
+  padding: 0;
+}
+
+.marker-window .text-wrapper {
+  padding: 0.5vw;
+}
+
+@media all and (orientation: landscape) {
+  .marker-modal-dialog {
+    max-width: 30vw;
+  }
+  .marker-window {
+    max-height: 80vh;
+  }
+  .marker-window .header {
+    font-size: 0.8em;
+  }
+  .marker-window .text-wrapper {
+    font-size: 0.9em;
+    padding: 0.5vw;
+  }
+}
+
+@media all and (orientation: portrait) {
+  .marker-modal-dialog {
+    max-width: 70vw;
+  }
+  .marker-window {
+    max-height: 80vh;
+  }
+  .marker-window .header {
+    font-size: 0.7em;
+  }
+  .marker-window .text-wrapper {
+    font-size: 0.8em;
+    padding: 0.5vh;
+  }
+}

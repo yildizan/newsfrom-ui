@@ -1,0 +1,65 @@
+/* Cluster modal styles — replaces cluster.component.scss */
+.cluster-window .thumbnail {
+  border-radius: 3px 0 0 3px;
+  max-height: 10vh;
+}
+
+.cluster-window .header div {
+  display: inline-block;
+}
+
+.cluster-window .category-wrapper {
+  overflow-y: auto;
+}
+
+.cluster-window .category-header {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-size: cover !important;
+  font-size: 1.1em;
+}
+
+.cluster-window .category-content {
+  padding-top: 1vh;
+}
+
+.cluster-window .accordion-item {
+  min-height: fit-content;
+  line-height: 1.5;
+}
+
+.cluster-window .text-wrapper {
+  margin: 0;
+  padding-left: 0.5vw;
+}
+
+@media all and (orientation: landscape) {
+  .cluster-modal-dialog {
+    max-width: 50vw;
+  }
+  .cluster-window {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 0.5vw;
+  }
+  .cluster-window .header {
+    font-size: 0.8em;
+  }
+  .cluster-window .text-wrapper {
+    font-size: 1em;
+  }
+}
+
+@media all and (orientation: portrait) {
+  .cluster-modal-dialog {
+    max-width: 80vw;
+  }
+  .cluster-window {
+    max-height: 40vh;
+    overflow-y: auto;
+    padding: 0.5vh;
+  }
+  .cluster-window .header {
+    font-size: 0.8em;
+  }
+}

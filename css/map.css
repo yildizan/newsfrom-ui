@@ -1,0 +1,70 @@
+/* Map styles — replaces map.component.scss */
+
+/* Cluster badge count via CSS content */
+.cluster-badge[data-count]::before {
+  content: attr(data-count);
+}
+
+.cluster-badge {
+  position: absolute;
+  top: -10px;
+  text-align: center;
+  border-radius: 1vw;
+  color: white;
+  padding: 0.3em 0.6em;
+  font-weight: bold;
+  font-size: 0.9em;
+  left: 42px;
+}
+
+/* 5 cluster tiers — expanded from SCSS @for loop */
+.cluster-badge-1 { background: #018CFA; }
+.cluster-badge-2 { background: #FDC100; }
+.cluster-badge-3 { background: #F70500; }
+.cluster-badge-4 { background: #FE00EC; }
+.cluster-badge-5 { background: #9C01FF; }
+
+.cluster-icon {
+  display: inline-block;
+  background-image: url('../assets/icon/cluster@2x.png');
+  background-size: contain;
+  border: 0;
+}
+
+/* Leaflet EasyButton overrides */
+.easy-icon {
+  font-size: 18px;
+  padding-bottom: 3px;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.easy-button-button {
+  padding: 0 !important;
+}
+
+/* General layout helpers */
+.content-wrapper {
+  max-width: inherit;
+  max-height: inherit;
+}
+
+.text-wrapper {
+  overflow-y: auto;
+}
+
+.header {
+  display: block;
+}
+
+.footer {
+  margin-bottom: 1vmax;
+}
+
+/* Modal speech-bubble style (rounded, no padding on container) */
+.marker-modal-dialog .modal-content,
+.cluster-modal-dialog .modal-content {
+  border-radius: 10px;
+  padding: 0;
+  border: none;
+}

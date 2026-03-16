@@ -1,0 +1,53 @@
+/* Global styles — replaces styles.scss */
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.map-container {
+  width: 100%;
+  height: 100%;
+}
+
+.silent-link {
+  color: inherit;
+}
+
+.read-title {
+  color: #ABB2B9;
+}
+
+.icon-text {
+  margin-left: 0.1em;
+}
+
+.white-bg {
+  background-color: white !important;
+}
+
+/* Share buttons — force perfect circle */
+.share-btn,
+.footer .btn.rounded-circle {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Chip input styling for filter modal */
+.chip-container {
+  min-height: 38px;
+  cursor: text;
+}
+.chip-input {
+  outline: none;
+  min-width: 80px;
+  font-size: 0.9em;
+}
+.chip-input::placeholder {
+  color: #aaa;
+}

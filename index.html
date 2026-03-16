@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>NewsFrom</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Displaying news on world map.">
+  <meta name="keywords" content="news,from,location,map,feed">
+  <meta name="robots" content="index,nofollow">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="NewsFrom">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://newsfrom.news">
+  <meta property="og:image" content="https://newsfrom.news/favicon.ico">
+  <meta property="og:description" content="Displaying news on world map.">
+
+  <!-- Viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <script defer src="assets/fontawesome/all.js"></script>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="assets/leaflet/leaflet.css">
+  <script src="assets/leaflet/leaflet.js"></script>
+
+  <!-- Leaflet MarkerCluster -->
+  <link rel="stylesheet" href="assets/leaflet/marker-cluster/MarkerCluster.css">
+  <script src="assets/leaflet/marker-cluster/leaflet.markercluster.js"></script>
+
+  <!-- Leaflet EasyButton -->
+  <link rel="stylesheet" href="assets/leaflet/easy-button/easy-button.css">
+  <script src="assets/leaflet/easy-button/easy-button.js"></script>
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/marker.css">
+  <link rel="stylesheet" href="css/cluster.css">
+</head>
+<body>
+  <!-- Map container -->
+  <div id="map" class="map-container"></div>
+
+  <!-- Marker Modal -->
+  <div class="modal fade" id="markerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered marker-modal-dialog">
+      <div class="modal-content marker-window shadow-sm" id="markerModalContent">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Cluster Modal -->
+  <div class="modal fade" id="clusterModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered cluster-modal-dialog">
+      <div class="modal-content cluster-window" id="clusterModalContent">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Modal -->
+  <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" id="filterModalContent">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul>
+            <li>This page is designed to display news at corresponding locations.</li>
+            <br>
+            <li>Filters can be applied to news by clicking <i class="fas fa-filter"></i> button.</li>
+            <br>
+            <li>For further information or questions, you can contact with
+              <a class="silent-link" href="mailto:hello@newsfrom.news">hello@newsfrom.news</a>.
+            </li>
+          </ul>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cookie Consent Toast -->
+  <div class="toast-container position-fixed bottom-0 start-0 end-0 p-3" style="z-index:9999">
+    <div id="cookieToast" class="toast w-100" role="alert" data-bs-autohide="false">
+      <div class="toast-body d-flex align-items-center justify-content-between">
+        <span>
+          🍪 We use cookies. By clicking OK, you accept
+          <a class="silent-link" href="assets/static/terms.html" target="_blank">Terms &amp; Conditions</a>
+          and
+          <a class="silent-link" href="assets/static/privacy.html" target="_blank">Privacy Policy</a>.
+        </span>
+        <button type="button" class="btn btn-sm btn-warning ms-3" id="cookieAcceptBtn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Snackbar / Toast for notifications -->
+  <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3" style="z-index:9998">
+    <div id="snackbar" class="toast align-items-center text-bg-dark" role="alert" data-bs-delay="3000">
+      <div class="d-flex">
+        <div class="toast-body" id="snackbarText"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- App JS -->
+  <script src="js/config.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/cookie.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/marker-modal.js"></script>
+  <script src="js/cluster-modal.js"></script>
+  <script src="js/filter-modal.js"></script>
+  <script src="js/map.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 # newsfrom-ui
 
 ## About this repository
-This project provides an user interface to [NewsFrom application](http://newsfrom.news).
+This project provides an user interface to [NewsFrom application](https://newsfrom.news).
 
 ## About NewsFrom
 It is an application to display news at related locations.
@@ -12,7 +12,7 @@ Project consists of 3 components:
 * *newsfrom-api*
 * **newsfrom-ui**
 
-Application can be accessed [here](http://newsfrom.news). 
+Application can be accessed [here](https://newsfrom.news). 
 
 ## License
 This repository is under the [MIT license](https://github.com/yildizan/newsfrom-ui/blob/master/LICENSE.md).

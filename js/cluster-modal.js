@@ -30,6 +30,9 @@ var ClusterModal = {
           hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
         });
         var readClass = news.isRead ? ' read-title' : '';
+        var thumbnailHtml = news.thumbnailUrl
+          ? '<img class="thumbnail" src="' + escapeAttr(news.thumbnailUrl) + '" style="width:100%;height:10vh;object-fit:cover" onerror="this.outerHTML=\'<div class=&quot;d-flex align-items-center justify-content-center text-muted&quot; style=&quot;width:100%;height:10vh;background:#e9ecef&quot;><i class=&quot;fas fa-image&quot;></i></div>\'">'
+          : '<div class="d-flex align-items-center justify-content-center text-muted" style="width:100%;height:10vh;background:#e9ecef"><i class="fas fa-image"></i></div>';
 
         html += '<div class="accordion-item">' +
           '<h2 class="accordion-header">' +
@@ -37,7 +40,7 @@ var ClusterModal = {
               'data-bs-toggle="collapse" data-bs-target="#' + newsId + '" data-news-index="' + news.index + '">' +
               '<div class="d-flex w-100 align-items-center">' +
                 '<div style="flex:0 0 20%">' +
-                  '<img class="thumbnail" src="' + escapeAttr(news.thumbnailUrl) + '" style="width:100%;object-fit:cover">' +
+                  thumbnailHtml +
                 '</div>' +
                 '<div class="text-wrapper" style="flex:0 0 80%;padding-left:0.5vw">' +
                   '<b class="' + readClass + '">' + escapeHtml(news.title) + '</b>' +

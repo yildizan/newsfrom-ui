@@ -6,9 +6,13 @@ var MarkerModal = {
       hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
     });
 
+    var thumbnailHtml = news.thumbnailUrl
+      ? '<img class="thumbnail" src="' + escapeAttr(news.thumbnailUrl) + '" onerror="this.remove()">'
+      : '';
+
     var html =
       '<div class="d-flex flex-column">' +
-        '<img class="thumbnail" src="' + escapeAttr(news.thumbnailUrl) + '">' +
+        thumbnailHtml +
         '<div class="text-wrapper">' +
           '<div class="header">' +
             '<div><span class="d-flex align-items-center">' +

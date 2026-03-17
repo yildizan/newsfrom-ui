@@ -34,7 +34,7 @@ var TWITTER_SHARE_URL = 'https://twitter.com/intent/tweet?' +
   'url=https%3A%2F%2Fnewsfrom.news%2F%3Fid%3D';
 
 // map tile API
-var MAP_API = 'https://api.mapbox.com/styles/v1/yildizan/cjzfop7z51bop1cmvns8ekqa4/tiles/256/{z}/{x}/{y}?access_token={accessToken}';
+var MAP_API = Config.apiUrl + '/map/tile/{z}/{x}/{y}';
 var DEFAULT_LATITUDE = 30.0;
 var DEFAULT_LONGITUDE = 10.0;
 var DEFAULT_ZOOM = 4;
@@ -48,8 +48,7 @@ var MAP_OPTIONS = {
   minZoom: 4,
   noWrap: true,
   detectRetina: true,
-  bounds: [[-180, -180], [180, 180]],
-  accessToken: Config.accessToken
+  bounds: [[-180, -180], [180, 180]]
 };
 
 // cluster tier logic

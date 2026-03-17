@@ -24,7 +24,10 @@ var NewsMap = {
   },
 
   initMap: function() {
-    NewsMap.map = L.map('map');
+    NewsMap.map = L.map('map', {
+      maxBounds: [[-90, -180], [90, 180]],
+      maxBoundsViscosity: 1.0
+    });
     L.tileLayer(MAP_API, MAP_OPTIONS).addTo(NewsMap.map);
     L.easyButton('<i class="fas fa-filter"></i>', function() { NewsMap.openFilter(); }).addTo(NewsMap.map);
     L.easyButton('<i class="fas fa-info"></i>', function() { NewsMap.openInfo(); }).addTo(NewsMap.map);
@@ -206,6 +209,20 @@ var NewsMap = {
       var pubVisible = NewsMap.publishers.get(f.publisher.id).visible;
       return catVisible && pubVisible;
     });
+
+    // If keywords are set, filter each feed's newsList
+    if (NewsMap.keywords.length > 0) {
+      feeds = feeds.map(function(f) {
+        var filtered = f.newsList.filter(function(news) {
+          var title = (news.title || '').toLowerCase();
+          var desc = (news.description || '').toLowerCase();
+          return NewsMap.keywords.some(function(kw) {
+            return title.indexOf(kw) !== -1 || desc.indexOf(kw) !== -1;
+          });
+        });
+        return { category: f.category, publisher: f.publisher, newsList: filtered };
+      }).filter(function(f) { return f.newsList.length > 0; });
+    }
 
     NewsMap.initNews(feeds);
   },

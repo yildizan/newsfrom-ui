@@ -47,7 +47,7 @@ var MAP_OPTIONS = {
   maxZoom: 9,
   minZoom: 4,
   noWrap: true,
-  detectRetina: true,
+  detectRetina: false,
   bounds: [[-180, -180], [180, 180]]
 };
 

@@ -33,6 +33,8 @@
 @media all and (orientation: portrait) {
   .marker-modal-dialog {
     max-width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
   }
   .marker-window {
     max-height: 80vh;
